@@ -58,3 +58,7 @@ cceyes.providers.upsert(productions)
 - [CCEyes Platform](https://platform.cceyes.eu)
 - [CCEyes Platform Specs](https://docs.cceyes.eu)
 - [CCEyes API Documentation](https://api.cceyes.eu/docs)
+
+## Funding
+
+Funded by the European Union. Views and opinions expressed are however those of the author(s) only and do not necessarily reflect those of the European Union or EACEA. Neither the European Union nor the granting authority can be held responsible for them.Funded by the European Union. Views and opinions expressed are however those of the author(s) only and do not necessarily reflect those of the European Union or EACEA. Neither the European Union nor the granting authority can be held responsible for them.
