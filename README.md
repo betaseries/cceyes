@@ -38,12 +38,25 @@ root@cceyes:~$ cat ~/productions.json | cceyes upsert | jq
 
 ```python
 import cceyes
+from cceyes.models import Production, ProductionReference, ProductionMeta
 
 cceyes.config.set_config('api', 'key', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
 
-productions = []
 # your ETL logic goes here
 # examples are located in examples/ folder
+productions = [Production(
+    title="The Mandalorian",
+    content="The travails of a lone gunfighter in the outer reaches of the galaxy, far from the authority of the New Republic.",
+    reference=ProductionReference(
+        type="TV Series",
+        provider="BetaSeries",
+    ),
+    meta=ProductionMeta(
+        id=68726,
+        title="The Mandalorian",
+        image="https://api.betaseries.com/pictures/shows?key=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&id=68726",
+    ),
+)]
 
 cceyes.providers.upsert(productions)
 ```

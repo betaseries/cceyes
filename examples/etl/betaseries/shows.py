@@ -2,6 +2,7 @@ import requests
 import logging
 import utils
 import cceyes
+from cceyes.models import Production, ProductionReference, ProductionMeta
 from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TimeRemainingColumn, TimeElapsedColumn
 from rich.logging import RichHandler
 
@@ -75,19 +76,20 @@ def main():
             progress.update(global_progress, advance=0.2)
 
             # Add the production to the list
-            productions.append({
-                'title': meta["title"],
-                'content': content,
-                'reference': {
-                    'type': 'TV Series',
-                    'provider': 'BetaSeries',
-                },
-                'meta': {
-                    'id': meta["id"],
-                    'title': meta["title"],
-                    'image': meta['image'],
-                },
-            })
+            productions.append(Production(
+                title=meta["title"],
+                content=content,
+                reference=ProductionReference(
+                    type='TV Series',
+                    provider='BetaSeries',
+                ),
+                meta=ProductionMeta(
+                    id=meta["id"],
+                    title=meta["title"],
+                    image=meta['image'],
+                ),
+            ))
+
             progress.update(global_progress, advance=0.2)
 
             # If we have 10 productions, send them to the API
