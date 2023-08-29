@@ -2,7 +2,7 @@
 
 ## Introduction
 
-CCEyes is a Python CLI and library for the [CCEyes](https://cceyes.eu) project that allows you to easily access the CCEyes API.
+CCEyes is a Python CLI and library for the [CCEyes](https://cceyes.eu) project that allows you to easily access the CCEyes API as a provider.
 
 ## Installation
 
@@ -18,12 +18,12 @@ pip install cceyes
 root@cceyes:~$ cceyes key
 Enter your API key:
 API key saved! 
-root@cceyes:~$ cceyes me | jq
+root@cceyes:~$ cceyes datasets | jq
 {
   "key": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-  "providers": [
+  "datasets": [
     {
-      "name": "BetaSeries",
+      "provider": "BetaSeries",
       "type": "TV Series"
     }
   ]
@@ -38,7 +38,7 @@ root@cceyes:~$ cat ~/productions.json | cceyes upsert | jq
 
 ```python
 import cceyes
-from cceyes.models import Production, ProductionReference, ProductionMeta
+from cceyes.models import Production, ProductionDataset, ProductionMeta
 
 cceyes.config.set_config('api', 'key', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
 
@@ -47,7 +47,7 @@ cceyes.config.set_config('api', 'key', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
 productions = [Production(
     title="The Mandalorian",
     content="The travails of a lone gunfighter in the outer reaches of the galaxy, far from the authority of the New Republic.",
-    reference=ProductionReference(
+    dataset=ProductionDataset(
         type="TV Series",
         provider="BetaSeries",
     ),

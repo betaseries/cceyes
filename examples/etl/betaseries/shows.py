@@ -2,7 +2,7 @@ import requests
 import logging
 import utils
 import cceyes
-from cceyes.models import Production, ProductionReference, ProductionMeta
+from cceyes.models import Production, ProductionDataset, ProductionMeta
 from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TimeRemainingColumn, TimeElapsedColumn
 from rich.logging import RichHandler
 
@@ -79,7 +79,7 @@ def main():
             productions.append(Production(
                 title=meta["title"],
                 content=content,
-                reference=ProductionReference(
+                dataset=ProductionDataset(
                     type='TV Series',
                     provider='BetaSeries',
                 ),

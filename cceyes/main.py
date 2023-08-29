@@ -2,7 +2,7 @@ import requests
 import json
 import sys
 import typer
-from . import providers, config
+from . import providers, config as config_module
 
 app = typer.Typer()
 
@@ -12,19 +12,19 @@ def main():
     """
     CCEyes CLI
     """
-    config.init()
+    config_module.init()
 
 
 @app.command()
 def key():
     api_key = typer.prompt("Enter your API key", hide_input=True)
-    config.set_config('api', 'key', api_key)
+    config_module.set_config('api', 'key', api_key)
 
     print("API key saved!")
 
 
 @app.command()
-def set_config(
+def config(
     parent: str = typer.Argument(..., help="Parent key"),
     key: str = typer.Argument(..., help="Key"),
     value: str = typer.Argument(..., help="Value"),
@@ -32,17 +32,17 @@ def set_config(
     """
     Set a config value
     """
-    config.set_config(parent, key, value)
+    config_module.set_config(parent, key, value)
 
     print("Config value saved!")
 
 
 @app.command()
-def me():
+def datasets():
     """
     Display providers associated with the key
     """
-    response = providers.me()
+    response = providers.datasets()
 
     print(response.text)
 
