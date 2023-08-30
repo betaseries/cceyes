@@ -44,12 +44,15 @@ def create_meta(tv_show):
 
 def create_content(tv_show):
     # Fetch the TV series details including the synopsis
-    return f"{tv_show['title']}: {tv_show['description']}"
+    content = f"{tv_show['title']}: {tv_show['description']}"
+
+    # Limit to 1000 characters
+    return content[:1000]
 
 
 def main():
     log = logging.getLogger("rich")
-    log.info(cceyes.providers.me().text)
+    log.info(cceyes.providers.datasets().text)
 
     with Progress(
         SpinnerColumn(),
@@ -60,7 +63,7 @@ def main():
         transient=True,
     ) as progress:
         global_progress = progress.add_task("[red]Fetching TV Series…")
-        tv_shows = find_popular_shows(100)
+        tv_shows = find_popular_shows(10000)
         progress.update(global_progress, total=len(tv_shows))
         productions = []
 
@@ -92,13 +95,18 @@ def main():
 
             progress.update(global_progress, advance=0.2)
 
-            # If we have 10 productions, send them to the API
-            if len(productions) == 10:
+            # If we have 100 productions, send them to the API
+            if len(productions) == 100:
                 response = cceyes.providers.upsert(productions)
                 log.debug(response.text)
 
                 progress.update(global_progress, advance=0.3*10)
                 productions = []
+
+        response = cceyes.providers.upsert(productions)
+        log.debug(response.text)
+
+        progress.update(global_progress, advance=len(tv_shows))
 
 
 if __name__ == "__main__":

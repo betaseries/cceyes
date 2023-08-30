@@ -3,29 +3,6 @@ from enum import Enum
 from typing import Optional
 
 
-class User(BaseModel):
-    id: str = Field(None, title="User ID", examples=["123456789"])
-    name: str = Field(..., title="User name", max_length=100, examples=["John Doe"])
-    email: str = Field(
-        ..., title="User email", max_length=100, examples=["john.doe@gmail.com"]
-    )
-    profilePictureUrl: Optional[str] = Field(
-        None,
-        title="User profile picture URL",
-        examples=["https://placehold.co/300x400"],
-    )
-
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "id": "123456789",
-                "name": "John Doe",
-                "email": "john.doe@gmail.com",
-                "profilePictureUrl": "https://placehold.co/300x400",
-            }
-        }
-
-
 class StatusEnum(str, Enum):
     Concept = "Concept"
     InDevelopment = "In Development"
@@ -73,7 +50,7 @@ class ProductionExtra(BaseModel):
 
 
 class ProductionBaseMeta(BaseModel):
-    id: int
+    id: str
 
 
 class ProductionMeta(ProductionBaseMeta):
@@ -116,25 +93,3 @@ class BaseProduction(BaseModel):
 class Production(BaseProduction):
     id: int = Field(None, title="Production ID", examples=[1])
     score: Optional[float] = Field(None, title="Relevance score", examples=[0.5])
-
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "title": "Napoleon",
-                "query": "An entertaining book about Napoleon for children",
-                "productions": [
-                    {
-                        "id": 1,
-                        "title": "Napoleon",
-                        "content": "Napoleon Bonaparte was a French military general who crowned himself the first emperor of France. His Napoleonic Code remains a model for governments worldwide. Napoleon Bonaparte, the first emperor of France, is regarded as one of the greatest military leaders in the history of the West. Learn more at Biography.com.",
-                        "dataset": {"type": "Book", "provider": "Google Books"},
-                        "meta": {
-                            "id": 1,
-                            "title": "Napoleon",
-                            "image": "https://placehold.co/300x400",
-                        },
-                        "score": 0.5,
-                    }
-                ],
-            }
-        }

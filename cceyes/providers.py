@@ -13,6 +13,11 @@ def datasets():
 
 def upsert(productions: list[Production]):
     url = config.get_config('api', 'host') + "/productions"
+
+    # go through every item in the list and convert to JSON
+    for i, production in enumerate(productions):
+        productions[i] = production.dict()
+
     response = requests.request("POST", url, headers=config.headers, json=productions)
 
     return response
