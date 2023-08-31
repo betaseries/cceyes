@@ -52,7 +52,7 @@ def get_config() -> VersioneerConfig:
     cfg.VCS = "git"
     cfg.style = "pep440"
     cfg.tag_prefix = ""
-    cfg.parentdir_prefix = "cceyes-"
+    cfg.parentdir_prefix = ""
     cfg.versionfile_source = "cceyes/_version.py"
     cfg.verbose = False
     return cfg
