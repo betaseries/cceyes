@@ -70,7 +70,7 @@ class ProductionDataset(BaseModel):
 
 
 class BaseProduction(BaseModel):
-    title: str = Field(..., title="Production title", max_length=100)
+    title: str = Field(..., title="Production title", max_length=255)
     content: str = Field(..., title="Production content", max_length=1000)
     dataset: ProductionDataset = Field(..., title="Production dataset")
     meta: ProductionMeta = Field(..., title="Production meta")

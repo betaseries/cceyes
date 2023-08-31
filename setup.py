@@ -1,13 +1,14 @@
 from setuptools import setup, find_packages
-
-# read the contents of the README file
+import versioneer
 from pathlib import Path
+
 this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text()
 
 setup(
     name="cceyes",
-    version="0.2.1",
+    version=versioneer.get_version(),
+    cmdclass=versioneer.get_cmdclass(),
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=find_packages(),

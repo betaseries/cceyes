@@ -36,7 +36,7 @@ def find_popular_shows(number=100):
 def create_meta(tv_show):
     # Fetch the TV series details
     return {
-        'id': tv_show['id'],
+        'id': str(tv_show['id']),
         'title': tv_show['title'],
         'image': tv_show['images']['poster'],
     }
@@ -63,7 +63,7 @@ def main():
         transient=True,
     ) as progress:
         global_progress = progress.add_task("[red]Fetching TV Series…")
-        tv_shows = find_popular_shows(10000)
+        tv_shows = find_popular_shows(1000)
         progress.update(global_progress, total=len(tv_shows))
         productions = []
 
