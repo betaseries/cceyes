@@ -40,9 +40,19 @@ def config(
 @app.command()
 def datasets():
     """
-    Display providers associated with the key
+    Display datasets associated with the key
     """
     response = providers.datasets()
+
+    print(response.text)
+
+
+@app.command()
+def stats():
+    """
+    Display datasets stats
+    """
+    response = providers.stats()
 
     print(response.text)
 

@@ -1,4 +1,6 @@
 from setuptools import setup, find_packages
+import sys
+sys.path.insert(0, ".")  # noqa
 import versioneer
 from pathlib import Path
 

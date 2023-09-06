@@ -17,7 +17,7 @@ def find_popular_books(num_books=40, start_index=0):
     base_url = f"https://www.googleapis.com/books/v1/volumes?key={key}"
     params = {
         "q": "subject:fiction",  # You can modify the query to suit your needs
-        "orderBy": "relevance",
+        "orderBy": "newest",
         "maxResults": 40,
         "langRestrict": "en",
         "startIndex": start_index,
@@ -80,7 +80,7 @@ def main():
         transient=True,
     ) as progress:
         global_progress = progress.add_task("[red]Fetching Books…")
-        books = find_popular_books(400, 0)
+        books = find_popular_books(1000, 0)
         progress.update(global_progress, total=len(books))
         productions = []
         logging.debug(books)
