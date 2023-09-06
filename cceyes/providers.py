@@ -11,6 +11,13 @@ def datasets():
     return response
 
 
+def stats():
+    url = config.get_config('api', 'host') + "/providers/stats"
+    response = requests.request("GET", url, headers=config.headers)
+
+    return response
+
+
 def upsert(productions: list[Production]):
     url = config.get_config('api', 'host') + "/productions"
 
