@@ -57,7 +57,7 @@ class ProductionMeta(ProductionBaseMeta):
     title: str
     image: str | None = None
     status: ProductionStatus | None = None
-    ratings: ProductionReviews | None = None
+    reviews: ProductionReviews | None = None
     extra: ProductionExtra | None = None
 
     def model_dump(self, **kwargs):
