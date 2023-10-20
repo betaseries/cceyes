@@ -14,7 +14,7 @@ class StatusEnum(str, Enum):
     Archived = "Archived"
 
 
-class ProductionRatings(BaseModel):
+class ProductionReviews(BaseModel):
     rating: float = Field(
         ..., title="Average rating from 0 to 10 from audiences or critics", ge=0, le=10
     )
@@ -57,7 +57,7 @@ class ProductionMeta(ProductionBaseMeta):
     title: str
     image: str | None = None
     status: ProductionStatus | None = None
-    ratings: ProductionRatings | None = None
+    ratings: ProductionReviews | None = None
     extra: ProductionExtra | None = None
 
     def model_dump(self, **kwargs):
