@@ -56,6 +56,7 @@ class ProductionBaseMeta(BaseModel):
 class ProductionMeta(ProductionBaseMeta):
     title: str
     image: str | None = None
+    publication_year: int | None = None
     status: ProductionStatus | None = None
     reviews: ProductionReviews | None = None
     extra: ProductionExtra | None = None

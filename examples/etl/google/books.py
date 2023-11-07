@@ -108,6 +108,7 @@ def main():
                     id=meta["id"],
                     title=meta["title"],
                     image=meta['image'],
+                    publication_year=book['publish_date'],
                 ),
             ))
 

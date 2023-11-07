@@ -5,7 +5,9 @@ import pandas as pd
 import cceyes.config as config
 import cceyes.productions
 import re
-from cceyes.models import Production, ProductionDataset, ProductionMeta
+import time
+from urllib.parse import urlparse, urlunparse
+from cceyes.models import Production, ProductionDataset, ProductionMeta, ProductionReviews
 from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TimeRemainingColumn, TimeElapsedColumn
 from rich.logging import RichHandler
 
@@ -18,12 +20,12 @@ logging.basicConfig(
 
 def find_popular_games():
     url = "https://steamspy.com/api.php"
-    response = requests.get(url, params={"request": "all"})
+    response = requests.get(url, params={"request": "all", "page": 1})
     data = response.json()
     games = []
 
     steam_spy_all = pd.DataFrame.from_dict(data, orient='index')
-    app_list = steam_spy_all[['appid', 'name']].sort_values('appid').reset_index(drop=True)
+    app_list = steam_spy_all[['appid', 'name', 'median_forever']].sort_values('appid').reset_index(drop=True)
 
     for index, row in app_list.iterrows():
         games.append(row)
@@ -59,6 +61,48 @@ def create_production(row):
     if game.get('detailed_description'):
         description = re.sub('<[^<]+?>', '', game['detailed_description'])
 
+        if game.get('metacritic'):
+            rating = round(float(game['metacritic']['score'] / 10), 2)
+        else:
+            rating = 5
+
+        popularity = 0
+
+        if row['median_forever'] > 8000:
+            popularity = 10
+        elif row['median_forever'] > 5000:
+            popularity = 9
+        elif row['median_forever'] > 3500:
+            popularity = 8
+        elif row['median_forever'] > 2000:
+            popularity = 7
+        elif row['median_forever'] > 1000:
+            popularity = 6
+        elif row['median_forever'] > 500:
+            popularity = 5
+        elif row['median_forever'] > 300:
+            popularity = 4
+        elif row['median_forever'] > 150:
+            popularity = 3
+        elif row['median_forever'] > 50:
+            popularity = 2
+        elif row['median_forever'] > 0:
+            popularity = 1
+
+        count = 0
+
+        if game.get('recommendations'):
+            count = game['recommendations']['total']
+
+        publication_year = None
+
+        if game.get('release_date'):
+            if not game['release_date']['coming_soon']:
+                publication_year = int(game['release_date']['date'].split(' ')[-1])
+
+        parsed_image_url = urlparse(game['header_image'])
+        clean_image_url = urlunparse(parsed_image_url._replace(query=""))
+
         production = Production(
             title=game['name'],
             content=description[:1000],
@@ -69,7 +113,13 @@ def create_production(row):
             meta=ProductionMeta(
                 id=str(row['appid']),
                 title=row['name'],
-                image=game['header_image'],
+                image=clean_image_url,
+                publication_year=publication_year,
+                reviews=ProductionReviews(
+                    rating=rating,
+                    count=count,
+                    popularity=popularity,
+                )
             ),
         )
 
@@ -102,16 +152,16 @@ def main():
             progress.update(global_progress, advance=0.1, description=game['name'])
 
             # Check if already exists
-            production = cceyes.productions.find(
-                ProductionDataset(type='Game', provider='Steam'),
-                ProductionMeta(id=str(game['appid']), title=game['name'])
-            )
+            # production = cceyes.productions.find(
+                # ProductionDataset(type='Game', provider='Steam'),
+                # ProductionMeta(id=str(game['appid']), title=game['name'])
+            # )
 
             progress.update(global_progress, advance=0.1)
 
-            if production:
-                progress.update(global_progress, advance=0.8)
-                continue
+            # if production:
+                # progress.update(global_progress, advance=0.8)
+                # continue
 
             # Create production
             production = create_production(game)
@@ -120,6 +170,8 @@ def main():
             if production is not None:
                 # Add the production to the list
                 productions.append(production)
+
+                time.sleep(1)
 
             progress.update(global_progress, advance=0.6)
 
@@ -130,6 +182,8 @@ def main():
 
                 progress.update(global_progress, advance=0.3*10)
                 productions = []
+
+                time.sleep(5)
 
         response = cceyes.providers.upsert(productions)
         log.debug(response.text)
